@@ -402,7 +402,7 @@ export const useProducts = (
         method: "GET",
         query: query as Record<string, string | number>,
       }),
-    queryKey: productsQueryKeys.list(),
+    queryKey: [productsQueryKeys.list(), query],
     ...options,
   })
 
@@ -463,7 +463,7 @@ export const useProducts = (
   return {
     ...data,
     products: productsImagesFormatter(products?.slice(0, filter?.limit)) || [],
-    count: products?.length || 0,
+    // count: products?.length || 0,
     ...rest,
   }
 }

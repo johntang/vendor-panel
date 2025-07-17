@@ -36,6 +36,7 @@ export const ProductListTable = () => {
   const { searchParams, raw } = useProductTableQuery({
     pageSize: PAGE_SIZE,
   })
+
   const { products, count, isLoading, isError, error } = useProducts(
     {
       limit: searchParams.limit,

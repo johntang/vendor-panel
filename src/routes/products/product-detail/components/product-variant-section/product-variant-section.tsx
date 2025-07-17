@@ -234,6 +234,8 @@ const useColumns = (product: HttpTypes.AdminProduct) => {
         })
       })
 
+      console.log(variant)
+
       const { location_levels } = useInventoryItemLevels(
         variant?.inventory_items?.[0]?.inventory_item_id!
       )

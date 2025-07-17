@@ -212,6 +212,7 @@ export const useInventoryItemLevels = (
           },
         }
       ),
+    enabled: !!inventoryItemId,
     queryKey: inventoryItemLevelsQueryKeys.detail(inventoryItemId),
     ...options,
   })
