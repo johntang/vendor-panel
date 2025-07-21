@@ -190,6 +190,11 @@ const useCoreRoutes = (): Omit<INavItem, "pathname">[] => {
       label: "Requests",
       to: "/requests",
     },
+    {
+      icon: <ChatBubbleLeftRight />,
+      label: "Topic",
+      to: "/topics",
+    },
   ]
 }
 

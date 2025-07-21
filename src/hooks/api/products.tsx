@@ -375,6 +375,8 @@ export const useProduct = (
   }
 }
 
+console.log({ productsQueryKeys })
+
 export const useProducts = (
   query?: HttpTypes.AdminProductListParams,
   options?: Omit<
@@ -402,7 +404,7 @@ export const useProducts = (
         method: "GET",
         query: query as Record<string, string | number>,
       }),
-    queryKey: [productsQueryKeys.list(), query],
+    queryKey: productsQueryKeys.list(query),
     ...options,
   })
 
@@ -609,6 +611,37 @@ export const useConfirmImportProducts = (
   return useMutation({
     mutationFn: (payload) => sdk.admin.product.confirmImport(payload),
     onSuccess: (data, variables, context) => {
+      options?.onSuccess?.(data, variables, context)
+    },
+    ...options,
+  })
+}
+
+export const useUpdateProductStatus = (
+  id: string,
+  options?: UseMutationOptions<
+    HttpTypes.AdminProductResponse,
+    FetchError,
+    HttpTypes.AdminUpdateProduct
+  >
+) => {
+  return useMutation({
+    mutationFn: async (payload) => {
+      return fetchQuery(`/vendor/products/${id}/status`, {
+        method: "POST",
+        body: {
+          status: payload.status,
+        },
+      })
+    },
+    onSuccess: async (data, variables, context) => {
+      await queryClient.invalidateQueries({
+        queryKey: productsQueryKeys.lists(),
+      })
+      await queryClient.invalidateQueries({
+        queryKey: productsQueryKeys.detail(id),
+      })
+
       options?.onSuccess?.(data, variables, context)
     },
     ...options,

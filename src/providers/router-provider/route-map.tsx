@@ -184,6 +184,20 @@ export const RouteMap: RouteObject[] = [
             lazy: () => import("../../routes/messages"),
           },
           {
+            path: "/topics",
+            errorElement: <ErrorBoundary />,
+            handle: {
+              breadcrumb: () => "Topic",
+            },
+            lazy: () => import("../../routes/topics/topic-list"),
+            children: [
+              {
+                path: "create",
+                lazy: () => import("../../routes/topics/topic-create"),
+              },
+            ],
+          },
+          {
             path: "/reviews",
             errorElement: <ErrorBoundary />,
             handle: {
