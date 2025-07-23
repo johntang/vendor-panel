@@ -11,13 +11,13 @@ import {
   useDashboardExtension,
   useExtendableForm,
 } from "../../../../../extensions"
+import { useCreateTopic } from "../../../../../hooks/api/topics"
+import { uploadFilesQuery } from "../../../../../lib/client"
 import {
   PRODUCT_CREATE_FORM_DEFAULTS,
   TopicCreateSchema,
 } from "../../constants"
 import { TopicCreateDetailsForm } from "../topic-create-details-form"
-import { uploadFilesQuery } from "../../../../../lib/client"
-import { useCreateTopic } from "../../../../../hooks/api/topics"
 
 enum Tab {
   DETAILS = "details",
@@ -26,13 +26,13 @@ enum Tab {
 type TabState = Record<Tab, ProgressStatus>
 
 export const TopicCreateForm = () => {
+  const { handleSuccess } = useRouteModal()
   const [tab, setTab] = useState<Tab>(Tab.DETAILS)
   const [tabState, setTabState] = useState<TabState>({
     [Tab.DETAILS]: "in-progress",
   })
 
   const { t } = useTranslation()
-  const { handleSuccess } = useRouteModal()
   const { getFormConfigs } = useDashboardExtension()
   const configs = getFormConfigs("product", "create")
 
@@ -94,6 +94,9 @@ export const TopicCreateForm = () => {
       {
         name: payload.name,
         image: uploadedMedia[0].url,
+        status: payload.status,
+        displaySince: payload.displaySince,
+        displayUntil: payload.displayUntil,
       },
       {
         onSuccess: (data) => {
@@ -103,7 +106,7 @@ export const TopicCreateForm = () => {
             })
           )
 
-          // handleSuccess(`../${data.topic.id}`)
+          handleSuccess()
         },
         onError: (error) => {
           toast.error(error.message)
@@ -111,14 +114,6 @@ export const TopicCreateForm = () => {
       }
     )
   })
-
-  const onNext = async (currentTab: Tab) => {
-    const valid = await form.trigger()
-
-    if (!valid) {
-      return
-    }
-  }
 
   useEffect(() => {
     const currentState = { ...tabState }

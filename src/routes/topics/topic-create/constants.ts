@@ -12,6 +12,9 @@ export const TopicCreateSchema = z.object({
   image: z.string().optional(),
   file: z.any().nullable(),
   media: z.array(MediaSchema).max(1).min(1),
+  status: z.enum(["SHOW", "HIDE"]).optional(),
+  displaySince: z.coerce.date().optional(),
+  displayUntil: z.coerce.date().optional(),
 })
 
 export const EditProductMediaSchema = z.object({
